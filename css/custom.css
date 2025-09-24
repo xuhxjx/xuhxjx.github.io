@@ -1,0 +1,67 @@
+/* =================================================== */
+/* ==       最终版 v5 - 仅控制宽度，不影响侧边栏    == */
+/* =================================================== */
+
+
+/* 这些样式只在 body 标签有一个叫 .fullscreen-mode 的 class 时才会生效 */
+
+
+/* --- Part 1: 针对【文章页面】的全屏样式 --- */
+
+/* 定位到文章页最外层容器 .post，并让其撑满 */
+body.fullscreen-mode .post #body-wrap,
+body.fullscreen-mode .post #content-inner,
+body.fullscreen-mode .post #post {
+    width: 100vw !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 移除文章内容的宽度限制 */
+body.fullscreen-mode .post #article-container.container {
+    max-width: none !important;
+    padding: 20px 40px !important; /* 给左右留一点点边距，防止文字贴边 */
+}
+
+/* 隐藏文章页顶部大图和底部版权区，以获得更好全屏效果 */
+body.fullscreen-mode .post #header,
+body.fullscreen-mode .post #footer {
+    display: none !important;
+}
+
+
+/* --- Part 2: 针对【主页】文章列表的全屏样式 --- */
+
+/* 定位到主页最外层容器 .page，并移除其宽度限制 */
+body.fullscreen-mode .page #content-inner {
+    width: 100vw !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 给主页的文章卡片列表区域加一点边距，防止卡片贴边 */
+body.fullscreen-mode .page #recent-posts {
+    padding: 40px !important;
+}
+/* =================================================== */
+/* ==      Part 3: 移动端适配 (响应式设计)       == */
+/* =================================================== */
+
+@media screen and (max-width: 768px) {
+  /* 上面的 @media screen and (max-width: 768px) 的意思是：
+    “如果屏幕宽度小于或等于 768px (典型的平板和手机宽度)，
+    就执行花括号 { } 里的所有样式。”
+  */
+
+  /* 在手机上，减小文章页的左右边距 */
+  body.fullscreen-mode .post #article-container.container {
+    padding: 20px 15px !important; /* 左右边距从 40px 大幅减小到 15px */
+  }
+
+  /* 在手机上，减小主页文章列表的左右边距 */
+  body.fullscreen-mode .page #recent-posts {
+    padding: 20px 15px !important; /* 左右边距从 40px 大幅减小到 15px */
+  }
+}
