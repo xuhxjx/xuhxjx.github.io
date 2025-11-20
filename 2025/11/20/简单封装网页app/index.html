@@ -1,0 +1,366 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>简单封装网页app | hxjx</title><meta name="author" content="Xu hxjx"><meta name="copyright" content="Xu hxjx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="只要做一个“空壳” APP，它唯一的目的就是打开您在网址（server.url），然后适应手机的手势。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单封装网页app">
+<meta property="og:url" content="https://blog.hxjx.hidns.co/2025/11/20/%E7%AE%80%E5%8D%95%E5%B0%81%E8%A3%85%E7%BD%91%E9%A1%B5app/">
+<meta property="og:site_name" content="hxjx">
+<meta property="og:description" content="只要做一个“空壳” APP，它唯一的目的就是打开您在网址（server.url），然后适应手机的手势。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.hxjx.hidns.co/assets/avatar.png">
+<meta property="article:published_time" content="2025-11-20T10:35:37.000Z">
+<meta property="article:modified_time" content="2025-11-20T10:37:57.386Z">
+<meta property="article:author" content="Xu hxjx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.hxjx.hidns.co/assets/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "简单封装网页app",
+  "url": "https://blog.hxjx.hidns.co/2025/11/20/%E7%AE%80%E5%8D%95%E5%B0%81%E8%A3%85%E7%BD%91%E9%A1%B5app/",
+  "image": "https://blog.hxjx.hidns.co/assets/avatar.png",
+  "datePublished": "2025-11-20T10:35:37.000Z",
+  "dateModified": "2025-11-20T10:37:57.386Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Xu hxjx",
+      "url": "https://blog.hxjx.hidns.co"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/assets/favicon.ico"><link rel="canonical" href="https://blog.hxjx.hidns.co/2025/11/20/%E7%AE%80%E5%8D%95%E5%B0%81%E8%A3%85%E7%BD%91%E9%A1%B5app/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '简单封装网页app',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 8.0.0"></head><body><div id="web_bg" style="background-image: url(/assets/wallpaper_2.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/assets/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-th"></i><span> 分类</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-laptop-code"></i><span> 技术</span></a></li><li><a class="site-page child" href="/categories/%E5%AD%A6%E4%B9%A0/"><i class="fa-fw fas fa-book-reader"></i><span> 学习</span></a></li><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB/"><i class="fa-fw fas fa-heart"></i><span> 生活</span></a></li><li><a class="site-page child" href="/categories/%E6%91%84%E5%BD%B1/"><i class="fa-fw fas fa-camera"></i><span> 摄影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/assets/wallpaper_1.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/assets/logo.png" alt="Logo"><span class="site-name">hxjx</span></a><a class="nav-page-title" href="/"><span class="site-name">简单封装网页app</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-th"></i><span> 分类</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-laptop-code"></i><span> 技术</span></a></li><li><a class="site-page child" href="/categories/%E5%AD%A6%E4%B9%A0/"><i class="fa-fw fas fa-book-reader"></i><span> 学习</span></a></li><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB/"><i class="fa-fw fas fa-heart"></i><span> 生活</span></a></li><li><a class="site-page child" href="/categories/%E6%91%84%E5%BD%B1/"><i class="fa-fw fas fa-camera"></i><span> 摄影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">简单封装网页app</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-20T10:35:37.000Z" title="发表于 2025-11-20 18:35:37">2025-11-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-20T10:37:57.386Z" title="更新于 2025-11-20 18:37:57">2025-11-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>只要做一个“空壳” APP，它唯一的目的就是打开您在网址（server.url），然后适应手机的手势。</p>
+<span id="more"></span>
+
+<h2 id="步骤一"><a href="#步骤一" class="headerlink" title="步骤一"></a>步骤一</h2><h3 id="1-打开-cmd-命令行，进入这个新的、空的文件夹："><a href="#1-打开-cmd-命令行，进入这个新的、空的文件夹：" class="headerlink" title="1.打开 cmd 命令行，进入这个新的、空的文件夹："></a>1.打开 cmd 命令行，进入这个新的、空的文件夹：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##新建文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> d:\Tools\dav</span><br><span class="line"><span class="comment">##进入文件夹目录</span></span><br><span class="line">d:</span><br><span class="line"><span class="built_in">cd</span> D:\Tools\dav</span><br></pre></td></tr></table></figure>
+<h3 id="2-安装“打包工具”："><a href="#2-安装“打包工具”：" class="headerlink" title="2. 安装“打包工具”："></a>2. 安装“打包工具”：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @capacitor/core @capacitor/android @capacitor/cli</span><br></pre></td></tr></table></figure>
+<h3 id="3-初始化-Capacitor："><a href="#3-初始化-Capacitor：" class="headerlink" title="3. 初始化 Capacitor："></a>3. 初始化 Capacitor：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx <span class="built_in">cap</span> init</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>App Name? -&gt; 我的导航 (您自己起名)</p>
+</li>
+<li><p>App ID? -&gt; com.myname.nav (您自己起ID)</p>
+</li>
+<li><p>web asset directory? -&gt; public</p>
+</li>
+</ul>
+<p>###4. 创建“欺骗”用的文件夹和文件：</p>
+<ul>
+<li><p>（npx cap init 不会创建 public 文件夹，我们必须手动创建）</p>
+</li>
+<li><p>在 cmd 中运行：</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> public</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>（public 文件夹里必须有一个 index.html）</p>
+</li>
+<li><p>在 cmd 中运行：</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&lt;html&gt;&lt;/html&gt;&quot;</span> &gt; public/index.html</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>修改配置文件：</p>
+<ul>
+<li><p>用记事本打开 D:\Tools\Nav\capacitor.config.json。</p>
+</li>
+<li><p>确保它看起来是这样的（webDir: ‘public’ 并且有 server.url）：</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;appId&quot;</span>: <span class="string">&quot;com.myname.nav&quot;</span>,</span><br><span class="line">  <span class="string">&quot;appName&quot;</span>: <span class="string">&quot;我的导航&quot;</span>,</span><br><span class="line">  <span class="string">&quot;webDir&quot;</span>: <span class="string">&quot;public&quot;</span>,</span><br><span class="line"></span><br><span class="line">  <span class="string">&quot;server&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;url&quot;</span>: <span class="string">&quot;https://[您的导航站网址]&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-添加-Android-平台："><a href="#5-添加-Android-平台：" class="headerlink" title="5. 添加 Android 平台："></a>5. 添加 Android 平台：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx <span class="built_in">cap</span> add android</span><br></pre></td></tr></table></figure>
+<h3 id="6-同步配置："><a href="#6-同步配置：" class="headerlink" title="6. 同步配置："></a>6. 同步配置：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx <span class="built_in">cap</span> <span class="built_in">sync</span> android</span><br></pre></td></tr></table></figure>
+<h2 id="步骤二"><a href="#步骤二" class="headerlink" title="步骤二"></a>步骤二</h2><h3 id="1-注入“链接”修复代码"><a href="#1-注入“链接”修复代码" class="headerlink" title="1. 注入“链接”修复代码"></a>1. 注入“链接”修复代码</h3><ul>
+<li><p>打开 Android Studio</p>
+</li>
+<li><p>打开您的新项目：D:\Tools\MyNavApp\android。</p>
+</li>
+<li><p>等待 Gradle 同步（这会很慢，因为它是一个新项目，需要下载“零件”）。</p>
+</li>
+<li><p>【关键】 找到您的 MainActivity.java：</p>
+</li>
+<li><p>app -&gt; java -&gt; com.myname.nav (您在步骤1里起的新ID) -&gt; MainActivity.java</p>
+</li>
+<li><p>双击打开它。</p>
+</li>
+<li><p>删除里面的所有内容。</p>
+</li>
+<li><p>粘贴这个新的、专门为“导航站”准备的“魔法代码”：</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">// 【【【【【 这是您在 init 时的 ID 】】】】】</span><br><span class="line">package com.xxsky.nav; </span><br><span class="line"></span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.webkit.WebSettings;</span><br><span class="line">import android.webkit.WebView;</span><br><span class="line">import android.webkit.WebViewClient;</span><br><span class="line">import com.getcapacitor.BridgeActivity;</span><br><span class="line">// (注意：我们不再需要 <span class="string">&quot;OnBackPressedCallback&quot;</span> 了)</span><br><span class="line"></span><br><span class="line">public class MainActivity extends BridgeActivity &#123;</span><br><span class="line"></span><br><span class="line">    // 我们需要把 webView 变量放在这里，以便“返回键”能“看到”它</span><br><span class="line">    private WebView webView; </span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState); </span><br><span class="line"></span><br><span class="line">        // 1. 【链接修复】(和之前一样)</span><br><span class="line">        //    我们把 webView 存到“全局”变量里</span><br><span class="line">        this.webView = this.bridge.getWebView();</span><br><span class="line"></span><br><span class="line">        WebSettings webSettings = this.webView.getSettings();</span><br><span class="line">        webSettings.setJavaScriptCanOpenWindowsAutomatically(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        this.webView.setWebViewClient(new <span class="function"><span class="title">WebViewClient</span></span>() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public boolean shouldOverrideUrlLoading(WebView view, String url) &#123;</span><br><span class="line">                view.loadUrl(url); </span><br><span class="line">                <span class="built_in">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // --- 2. 【【【这就是“返回键”的“终极修复”（安全版）】】】 ---</span><br><span class="line"></span><br><span class="line">    // 我们“覆盖”那个“旧的、可靠的” onBackPressed 函数</span><br><span class="line">    @Override</span><br><span class="line">    public void <span class="function"><span class="title">onBackPressed</span></span>() &#123;</span><br><span class="line">        // a. 当用户按下“返回”...</span><br><span class="line"></span><br><span class="line">        // b. ...我们检查“浏览器”是否可以后退</span><br><span class="line">        <span class="keyword">if</span> (this.webView.canGoBack()) &#123;</span><br><span class="line">            // c. ...如果可以，我们就在“浏览器”里后退</span><br><span class="line">            this.webView.goBack();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            // d. ...如果不能(在主页)，我们就调用“系统默认”的返回 (也就是“退出APP”)</span><br><span class="line">            super.onBackPressed();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者有沉浸式功能的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">// 【【【 关键：这是您的 ID ！】】】</span><br><span class="line">package com.navgo.hxjx;</span><br><span class="line"></span><br><span class="line">import android.graphics.Color; // &lt;-- 【新】导入“颜色”</span><br><span class="line">import android.os.Bundle;</span><br><span class="line">import android.view.View; // &lt;-- 【新】导入“View”</span><br><span class="line">import android.webkit.WebSettings;</span><br><span class="line">import android.webkit.WebView;</span><br><span class="line">import android.webkit.WebViewClient;</span><br><span class="line">import com.getcapacitor.BridgeActivity;</span><br><span class="line">import com.getcapacitor.WebViewListener; // 导入“安全”工具</span><br><span class="line"></span><br><span class="line">public class MainActivity extends BridgeActivity &#123;</span><br><span class="line"></span><br><span class="line">    // 我们需要把 webView 变量放在这里，以便“返回键”能“看到”它</span><br><span class="line">    private WebView webView;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line"></span><br><span class="line">        // --- 【【【这就是“沉浸式”的“终极修复”】】】 ---</span><br><span class="line">        // 这会“强行”让窗口画在状态栏下面 (导致“重叠”)</span><br><span class="line">        // 并且把状态栏设为“透明”</span><br><span class="line">        getWindow().getDecorView().setSystemUiVisibility(</span><br><span class="line">                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |</span><br><span class="line">                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN</span><br><span class="line">        );</span><br><span class="line">        getWindow().setStatusBarColor(Color.TRANSPARENT);</span><br><span class="line">        //</span><br><span class="line"></span><br><span class="line">        // 1. 【链接修复】(和之前一样)</span><br><span class="line">        //    我们把 webView 存到“全局”变量里</span><br><span class="line">        this.webView = this.bridge.getWebView();</span><br><span class="line"></span><br><span class="line">        WebSettings webSettings = this.webView.getSettings();</span><br><span class="line">        webSettings.setJavaScriptCanOpenWindowsAutomatically(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        this.webView.setWebViewClient(new <span class="function"><span class="title">WebViewClient</span></span>() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public boolean shouldOverrideUrlLoading(WebView view, String url) &#123;</span><br><span class="line">                view.loadUrl(url);</span><br><span class="line">                <span class="built_in">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // --- 2. 【【【这就是“返回键”的“终极修复”（安全版）】】】 ---</span><br><span class="line"></span><br><span class="line">    // 我们“覆盖”那个“旧的、可靠的” onBackPressed 函数</span><br><span class="line">    @Override</span><br><span class="line">    public void <span class="function"><span class="title">onBackPressed</span></span>() &#123;</span><br><span class="line">        // a. 当用户按下“返回”...</span><br><span class="line"></span><br><span class="line">        // b. ...我们检查“浏览器”是否可以后退</span><br><span class="line">        <span class="keyword">if</span> (this.webView.canGoBack()) &#123;</span><br><span class="line">            // c. ...如果可以，我们就在“浏览器”里后退</span><br><span class="line">            this.webView.goBack();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            // d. ...如果不能(在主页)，我们就调用“系统默认”的返回 (也就是“退出APP”)</span><br><span class="line">            super.onBackPressed();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤三"><a href="#步骤三" class="headerlink" title="步骤三"></a>步骤三</h2><p>更改 APP 图标</p>
+<h3 id="1：准备您的图标文件"><a href="#1：准备您的图标文件" class="headerlink" title="1：准备您的图标文件"></a>1：准备您的图标文件</h3><p>您需要一张正方形的图片。</p>
+<ul>
+<li><p>格式： 最好是 .png 格式（支持透明背景）。</p>
+</li>
+<li><p>尺寸： 尺寸越大越好，Android Studio 会自动帮您缩放。理想尺寸是 1024x1024 像素（512x512 也可以）。</p>
+</li>
+<li><p>注意： 现代安卓图标有“安全区域”（通常是中间 66% 的圆形或圆角矩形）。请确保您的“核心”Logo 在这个安全区域内，否则它可能会被裁切。</p>
+</li>
+<li><p>准备好这张 .png 文件，并把它放在您电脑上一个容易找到的位置（比如“桌面”）。</p>
+</li>
+</ul>
+<h3 id="2：使用-Android-Studio-的“Asset-Studio”工具"><a href="#2：使用-Android-Studio-的“Asset-Studio”工具" class="headerlink" title="2：使用 Android Studio 的“Asset Studio”工具"></a>2：使用 Android Studio 的“Asset Studio”工具</h3><ul>
+<li><p>请回到您的 Android Studio（确保 D:\Tools\LunaTV\android 项目是打开的）。</p>
+</li>
+<li><p>在左上角的**“项目”文件浏览器**中（您之前找 MainActivity.java 的地方）。</p>
+</li>
+<li><p>右键点击最顶层的那个 app 文件夹（它有一个蓝色的“a”图标）。</p>
+</li>
+<li><p>在弹出的菜单中，移动到 “New” (新建) -&gt; “Image Asset” (图像资产)。</p>
+</li>
+</ul>
+<h3 id="3-配置您的新图标"><a href="#3-配置您的新图标" class="headerlink" title="3. 配置您的新图标"></a>3. 配置您的新图标</h3><ul>
+<li><p>点击后，会弹出一个叫 “Asset Studio” 的新窗口。</p>
+</li>
+<li><p>Icon Type (图标类型)： 保持默认的 Launcher Icons (Adaptive &amp; Legacy)。</p>
+</li>
+<li><p>Name (名称)： 保持默认的 ic_launcher。</p>
+</li>
+<li><p>Source Asset (源资产)：</p>
+</li>
+<li><p>在 Path (路径) 这一行，点击它最右边的**“文件夹”图标**。</p>
+</li>
+<li><p>在弹出的文件选择器中，找到并选择您在步骤 1 中准备好的那张 .png 图标文件。</p>
+</li>
+<li><p>点击 OK。</p>
+</li>
+<li><p>调整 (Scaling)：</p>
+</li>
+<li><p>您会立刻在右侧的“预览”窗口看到您的图标。</p>
+</li>
+<li><p>您可能会看到一个“安全区”的圆圈。</p>
+</li>
+<li><p>在中间的 Resize (调整大小) 滑块上，您可以左右拖动，把您的图标缩放到您觉得合适的大小（通常是让它刚好填满那个“安全区”）。</p>
+</li>
+<li><p>（可选）Background Layer (背景层)：</p>
+</li>
+<li><p>如果您的 .png 是透明的，您可以在这里给它加一个纯色背景。</p>
+</li>
+<li><p>在 Name: ic_launcher 的下方，您会看到三个标签页 (Tab)：</p>
+<ul>
+<li><p>Foreground Layer (前景层) &lt;– 您现在在这里！（它是蓝色的）</p>
+</li>
+<li><p>Background Layer (背景层) &lt;– 您要点击这里！</p>
+</li>
+<li><p>Options (选项)</p>
+</li>
+</ul>
+</li>
+<li><p>点击一下第二个标签页，也就是 Background Layer (背景层)</p>
+<ul>
+<li>Source Asset -&gt; Asset Type -&gt; Color (颜色)，</li>
+<li>然后选择您想要的背景色。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-生成图标"><a href="#4-生成图标" class="headerlink" title="4. 生成图标"></a>4. 生成图标</h3><ul>
+<li><p>当您对预览满意后，点击右下角的 “Next” (下一步) 按钮。</p>
+</li>
+<li><p>它会弹出一个新窗口，显示它将要**“覆盖”**（Overwrite）一大堆旧的 ic_launcher.png 文件。</p>
+</li>
+<li><p>这是正常的，这正是我们想要的。</p>
+</li>
+<li><p>点击右下角的 “Finish” (完成) 按钮。</p>
+</li>
+</ul>
+<p>Android Studio 现在会自动生成所有不同尺寸（mdpi, hdpi, xhdpi 等）的图标，并替换掉项目里默认的那个 Capacitor 图标。</p>
+<h2 id="步骤四："><a href="#步骤四：" class="headerlink" title="步骤四："></a>步骤四：</h2><p>启动logo图标</p>
+<h3 id="1-准备您的新图片"><a href="#1-准备您的新图片" class="headerlink" title="1. 准备您的新图片"></a>1. 准备您的新图片</h3><ul>
+<li><p>请您准备好您自己的“启动页面”图片（例如，您桌面上有一个 logo.png）。</p>
+</li>
+<li><p>重要：您不需要准备11个版本。您只需要一张高分辨率的 .png 文件。</p>
+</li>
+<li><p>尺寸如：215*215，底色透明。</p>
+</li>
+</ul>
+<h3 id="2-添加logo-png"><a href="#2-添加logo-png" class="headerlink" title="2. 添加logo.png"></a>2. 添加logo.png</h3><ul>
+<li><p>请您再次找到并打开那个文件： app -&gt; res -&gt; drawable -&gt; splash_layout.xml</p>
+</li>
+<li><p>回到 Android Studio。</p>
+</li>
+<li><p>在左侧文件树中，找到 res&#x2F;drawable 文件夹。</p>
+</li>
+<li><p>右键点击 drawable 文件夹-&gt;open in-&gt;Explorer” (在资源管理器中显示)。</p>
+</li>
+<li><p>Windows 文件夹会打开 drawable 文件夹。</p>
+</li>
+<li><p>把logo.png 复制到这个文件夹里。 (我们不再需要 drawable-hdpi那些文件夹了)</p>
+</li>
+</ul>
+<p>###3. 创建“智能”布局文件 (splash_layout.xml)</p>
+<ul>
+<li><p>回到 Android Studio。</p>
+</li>
+<li><p>右键点击 res&#x2F;drawable 文件夹。</p>
+</li>
+<li><p>选择 “New” (新建) -&gt; “Drawable Resource File” (Drawable 资源文件)。</p>
+</li>
+<li><p>File name (文件名): 请输入 splash_layout</p>
+</li>
+<li><p>Root element (根元素): 请输入 layer-list</p>
+</li>
+<li><p>点击 OK。</p>
+</li>
+<li><p>一个新的 splash_layout.xml 文件会生成。</p>
+</li>
+<li><p>在资源管理器中记事本打开，然后替换粘贴以下全部代码：</p>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">layer-list</span> <span class="attr">xmlns:android</span>=<span class="string">&quot;http://schemas.android.com/apk/res/android&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">color</span> <span class="attr">android:color</span>=<span class="string">&quot;?android:attr/colorBackground&quot;</span> /&gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:width</span>=<span class="string">&quot;200dp&quot;</span> </span></span><br><span class="line"><span class="tag">        <span class="attr">android:height</span>=<span class="string">&quot;200dp&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:drawable</span>=<span class="string">&quot;@drawable/logo&quot;</span>  </span></span><br><span class="line"><span class="tag">        <span class="attr">android:gravity</span>=<span class="string">&quot;center&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">layer-list</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>*（重要！） 在粘贴后，请务必修改 android:drawable&#x3D;”@drawable&#x2F;logo” 这一行，把 logo 改成您自己的文件名（不带 .png）。</p>
+<ul>
+<li>保存并关闭 splash_layout.xml。</li>
+</ul>
+<h3 id="4-告诉-APP-使用“新”的启动页"><a href="#4-告诉-APP-使用“新”的启动页" class="headerlink" title="4. 告诉 APP 使用“新”的启动页"></a>4. 告诉 APP 使用“新”的启动页</h3><ul>
+<li><p>打开 res&#x2F;values&#x2F;styles.xml 文件。</p>
+</li>
+<li><p>找到 AppTheme.NoActionBarLaunch 这一段，整个<code>&lt;style&gt;</code>替换修改成</p>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">&quot;AppTheme.NoActionBarLaunch&quot;</span> <span class="attr">parent</span>=<span class="string">&quot;AppTheme.NoActionBar&quot;</span>&gt;</span><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;android:windowBackground&quot;</span>&gt;</span>@drawable/splash_layout<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;windowActionBar&quot;</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;windowNoTitle&quot;</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">&quot;AppTheme.NoActionBarLaunch&quot;</span> <span class="attr">parent</span>=<span class="string">&quot;Theme.AppCompat.Light.NoActionBar&quot;</span>&gt;</span><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;android:windowBackground&quot;</span>&gt;</span>@drawable/splash_layout<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;windowActionBar&quot;</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">&quot;windowNoTitle&quot;</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>保存并关闭 styles.xml。</p>
+</li>
+<li><p>（可选，但推荐） 为了省空间，您可以删除掉那 11 张旧的 splash.png 文件了（在 drawable 文件夹下的 splash (11) 组上点右键 -&gt; “Delete”）。</p>
+</li>
+</ul>
+<h2 id="步骤五："><a href="#步骤五：" class="headerlink" title="步骤五："></a>步骤五：</h2><p>打包生成最终的 APK</p>
+<h3 id="1-在-Android-Studio-中，点击顶部菜单栏的-“Build”-构建-。"><a href="#1-在-Android-Studio-中，点击顶部菜单栏的-“Build”-构建-。" class="headerlink" title="1. 在 Android Studio 中，点击顶部菜单栏的 “Build” (构建)。"></a>1. 在 Android Studio 中，点击顶部菜单栏的 “Build” (构建)。</h3><h3 id="2-选择-“Generate-App-Bundles-or-APKs”-生成…-。"><a href="#2-选择-“Generate-App-Bundles-or-APKs”-生成…-。" class="headerlink" title="2. 选择 “Generate App Bundles or APKs” (生成…)。"></a>2. 选择 “Generate App Bundles or APKs” (生成…)。</h3><h3 id="3-在子菜单中，选择-“Generate-APKs”-生成-APKs-。"><a href="#3-在子菜单中，选择-“Generate-APKs”-生成-APKs-。" class="headerlink" title="3. 在子菜单中，选择 “Generate APKs” (生成 APKs)。"></a>3. 在子菜单中，选择 “Generate APKs” (生成 APKs)。</h3><h3 id="4-等待构建完成（BUILD-SUCCESSFUL）。"><a href="#4-等待构建完成（BUILD-SUCCESSFUL）。" class="headerlink" title="4. 等待构建完成（BUILD SUCCESSFUL）。"></a>4. 等待构建完成（BUILD SUCCESSFUL）。</h3><h3 id="5-在右下角弹出的通知中，点击-“Locate”-定位-。"><a href="#5-在右下角弹出的通知中，点击-“Locate”-定位-。" class="headerlink" title="5. 在右下角弹出的通知中，点击 “Locate” (定位)。"></a>5. 在右下角弹出的通知中，点击 “Locate” (定位)。</h3><h3 id="6-最终成品：-您会得到-app-debug-apk-文件，它现在是“布局完美”且“功能完美”的。"><a href="#6-最终成品：-您会得到-app-debug-apk-文件，它现在是“布局完美”且“功能完美”的。" class="headerlink" title="6. 最终成品： 您会得到 app-debug.apk 文件，它现在是“布局完美”且“功能完美”的。"></a>6. 最终成品： 您会得到 app-debug.apk 文件，它现在是“布局完美”且“功能完美”的。</h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.hxjx.hidns.co">Xu hxjx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.hxjx.hidns.co/2025/11/20/%E7%AE%80%E5%8D%95%E5%B0%81%E8%A3%85%E7%BD%91%E9%A1%B5app/">https://blog.hxjx.hidns.co/2025/11/20/%E7%AE%80%E5%8D%95%E5%B0%81%E8%A3%85%E7%BD%91%E9%A1%B5app/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.hxjx.hidns.co" target="_blank">hxjx</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/assets/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/11/13/%E5%85%B3%E4%BA%8Eopenlist%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D/" title="关于openlist文件命名"><img class="cover" src="https://cdn.jsdelivr.net/gh/xuhxjx/myimg@main/wallpaper_1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">关于openlist文件命名</div></div><div class="info-2"><div class="info-item-1">1. 在前面加上中文名并保留年份第几季第几集第一行 (源文件名正则表达式): 1^(\d&#123;4&#125;)\.(S\d&#123;2&#125;)(E\d&#123;2&#125;)\..*\.(.*)$ 第二行 (新文件名正则表达式): 1[您的中文名称].$1.$2$3.$4 示例源文件: 2025.S02E01.2160p.MAX+.HDR.60fps..WEB-DL.HEVC.10bit.DDP.mp4  第一行 (匹配): ^(\d{4}).(S\d{2})(E\d{2})...(.)$  第二行 (替换为): 剧集名称.$1.$2$3.$4  新文件名: 剧集名称.2025.S02E01.mp4   正则表达式分解第一行 (匹配):  ^：匹配文件名的开头。  (\d{4})：捕获组 1 ($1)。匹配并捕获4位数字（年份 2025）。  .：匹配一个字面上的点。  (S\d{2})：捕获组 2 ($2)。匹配并捕获 “S” 和两位数字（季 S02）。  (E\d{2})：捕获组 3 ($3)。匹配并捕获 “E” 和两位数字（集 E01）。  ..*：匹配一...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/assets/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Xu hxjx</div><div class="author-info-description">hxjx的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/xuhxjx" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #4183c4;"></i></a><a class="social-icon" href="mailto:xuhxjxhk@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #FF6666;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%80"><span class="toc-number">1.</span> <span class="toc-text">步骤一</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%89%93%E5%BC%80-cmd-%E5%91%BD%E4%BB%A4%E8%A1%8C%EF%BC%8C%E8%BF%9B%E5%85%A5%E8%BF%99%E4%B8%AA%E6%96%B0%E7%9A%84%E3%80%81%E7%A9%BA%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">1.打开 cmd 命令行，进入这个新的、空的文件夹：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85%E2%80%9C%E6%89%93%E5%8C%85%E5%B7%A5%E5%85%B7%E2%80%9D%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">2. 安装“打包工具”：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9D%E5%A7%8B%E5%8C%96-Capacitor%EF%BC%9A"><span class="toc-number">1.3.</span> <span class="toc-text">3. 初始化 Capacitor：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%B7%BB%E5%8A%A0-Android-%E5%B9%B3%E5%8F%B0%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">5. 添加 Android 平台：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%90%8C%E6%AD%A5%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-number">1.5.</span> <span class="toc-text">6. 同步配置：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E4%BA%8C"><span class="toc-number">2.</span> <span class="toc-text">步骤二</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B3%A8%E5%85%A5%E2%80%9C%E9%93%BE%E6%8E%A5%E2%80%9D%E4%BF%AE%E5%A4%8D%E4%BB%A3%E7%A0%81"><span class="toc-number">2.1.</span> <span class="toc-text">1. 注入“链接”修复代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E4%B8%89"><span class="toc-number">3.</span> <span class="toc-text">步骤三</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%EF%BC%9A%E5%87%86%E5%A4%87%E6%82%A8%E7%9A%84%E5%9B%BE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">1：准备您的图标文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%EF%BC%9A%E4%BD%BF%E7%94%A8-Android-Studio-%E7%9A%84%E2%80%9CAsset-Studio%E2%80%9D%E5%B7%A5%E5%85%B7"><span class="toc-number">3.2.</span> <span class="toc-text">2：使用 Android Studio 的“Asset Studio”工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E6%82%A8%E7%9A%84%E6%96%B0%E5%9B%BE%E6%A0%87"><span class="toc-number">3.3.</span> <span class="toc-text">3. 配置您的新图标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%94%9F%E6%88%90%E5%9B%BE%E6%A0%87"><span class="toc-number">3.4.</span> <span class="toc-text">4. 生成图标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E5%9B%9B%EF%BC%9A"><span class="toc-number">4.</span> <span class="toc-text">步骤四：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%87%86%E5%A4%87%E6%82%A8%E7%9A%84%E6%96%B0%E5%9B%BE%E7%89%87"><span class="toc-number">4.1.</span> <span class="toc-text">1. 准备您的新图片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%B7%BB%E5%8A%A0logo-png"><span class="toc-number">4.2.</span> <span class="toc-text">2. 添加logo.png</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%91%8A%E8%AF%89-APP-%E4%BD%BF%E7%94%A8%E2%80%9C%E6%96%B0%E2%80%9D%E7%9A%84%E5%90%AF%E5%8A%A8%E9%A1%B5"><span class="toc-number">4.3.</span> <span class="toc-text">4. 告诉 APP 使用“新”的启动页</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4%E4%BA%94%EF%BC%9A"><span class="toc-number">5.</span> <span class="toc-text">步骤五：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9C%A8-Android-Studio-%E4%B8%AD%EF%BC%8C%E7%82%B9%E5%87%BB%E9%A1%B6%E9%83%A8%E8%8F%9C%E5%8D%95%E6%A0%8F%E7%9A%84-%E2%80%9CBuild%E2%80%9D-%E6%9E%84%E5%BB%BA-%E3%80%82"><span class="toc-number">5.1.</span> <span class="toc-text">1. 在 Android Studio 中，点击顶部菜单栏的 “Build” (构建)。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%80%89%E6%8B%A9-%E2%80%9CGenerate-App-Bundles-or-APKs%E2%80%9D-%E7%94%9F%E6%88%90%E2%80%A6-%E3%80%82"><span class="toc-number">5.2.</span> <span class="toc-text">2. 选择 “Generate App Bundles or APKs” (生成…)。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9C%A8%E5%AD%90%E8%8F%9C%E5%8D%95%E4%B8%AD%EF%BC%8C%E9%80%89%E6%8B%A9-%E2%80%9CGenerate-APKs%E2%80%9D-%E7%94%9F%E6%88%90-APKs-%E3%80%82"><span class="toc-number">5.3.</span> <span class="toc-text">3. 在子菜单中，选择 “Generate APKs” (生成 APKs)。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%AD%89%E5%BE%85%E6%9E%84%E5%BB%BA%E5%AE%8C%E6%88%90%EF%BC%88BUILD-SUCCESSFUL%EF%BC%89%E3%80%82"><span class="toc-number">5.4.</span> <span class="toc-text">4. 等待构建完成（BUILD SUCCESSFUL）。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%9C%A8%E5%8F%B3%E4%B8%8B%E8%A7%92%E5%BC%B9%E5%87%BA%E7%9A%84%E9%80%9A%E7%9F%A5%E4%B8%AD%EF%BC%8C%E7%82%B9%E5%87%BB-%E2%80%9CLocate%E2%80%9D-%E5%AE%9A%E4%BD%8D-%E3%80%82"><span class="toc-number">5.5.</span> <span class="toc-text">5. 在右下角弹出的通知中，点击 “Locate” (定位)。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%9C%80%E7%BB%88%E6%88%90%E5%93%81%EF%BC%9A-%E6%82%A8%E4%BC%9A%E5%BE%97%E5%88%B0-app-debug-apk-%E6%96%87%E4%BB%B6%EF%BC%8C%E5%AE%83%E7%8E%B0%E5%9C%A8%E6%98%AF%E2%80%9C%E5%B8%83%E5%B1%80%E5%AE%8C%E7%BE%8E%E2%80%9D%E4%B8%94%E2%80%9C%E5%8A%9F%E8%83%BD%E5%AE%8C%E7%BE%8E%E2%80%9D%E7%9A%84%E3%80%82"><span class="toc-number">5.6.</span> <span class="toc-text">6. 最终成品： 您会得到 app-debug.apk 文件，它现在是“布局完美”且“功能完美”的。</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/11/20/%E7%AE%80%E5%8D%95%E5%B0%81%E8%A3%85%E7%BD%91%E9%A1%B5app/" title="简单封装网页app">简单封装网页app</a><time datetime="2025-11-20T10:35:37.000Z" title="发表于 2025-11-20 18:35:37">2025-11-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/13/%E5%85%B3%E4%BA%8Eopenlist%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D/" title="关于openlist文件命名"><img src="https://cdn.jsdelivr.net/gh/xuhxjx/myimg@main/wallpaper_1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="关于openlist文件命名"/></a><div class="content"><a class="title" href="/2025/11/13/%E5%85%B3%E4%BA%8Eopenlist%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D/" title="关于openlist文件命名">关于openlist文件命名</a><time datetime="2025-11-13T12:54:03.000Z" title="发表于 2025-11-13 20:54:03">2025-11-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/05/docker-compose%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1%E4%B8%8Ecaddy%E5%8F%8D%E4%BB%A3/" title="docker-compose部署服务与caddy反代"><img src="https://cdn.jsdelivr.net/gh/xuhxjx/myimg@main/wallpaper_1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker-compose部署服务与caddy反代"/></a><div class="content"><a class="title" href="/2025/10/05/docker-compose%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1%E4%B8%8Ecaddy%E5%8F%8D%E4%BB%A3/" title="docker-compose部署服务与caddy反代">docker-compose部署服务与caddy反代</a><time datetime="2025-10-04T19:58:20.000Z" title="发表于 2025-10-05 03:58:20">2025-10-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/01/%E8%B0%B7%E6%AD%8C%E4%BA%91%E5%AE%89%E8%A3%85%E9%9D%A2%E6%9D%BF%E4%B8%8E%E5%8F%8D%E4%BB%A3/" title="谷歌云安装面板与反代"><img src="https://cdn.jsdelivr.net/gh/xuhxjx/myimg@main/wallpaper_1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="谷歌云安装面板与反代"/></a><div class="content"><a class="title" href="/2025/10/01/%E8%B0%B7%E6%AD%8C%E4%BA%91%E5%AE%89%E8%A3%85%E9%9D%A2%E6%9D%BF%E4%B8%8E%E5%8F%8D%E4%BB%A3/" title="谷歌云安装面板与反代">谷歌云安装面板与反代</a><time datetime="2025-10-01T02:49:04.000Z" title="发表于 2025-10-01 10:49:04">2025-10-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/09/29/docker%E4%B8%80%E9%94%AE%E8%BF%81%E7%A7%BB%E6%81%A2%E5%A4%8D%E5%90%AF%E5%8A%A8/" title="docker一键迁移恢复启动"><img src="https://cdn.jsdelivr.net/gh/xuhxjx/myimg@main/wallpaper_1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker一键迁移恢复启动"/></a><div class="content"><a class="title" href="/2025/09/29/docker%E4%B8%80%E9%94%AE%E8%BF%81%E7%A7%BB%E6%81%A2%E5%A4%8D%E5%90%AF%E5%8A%A8/" title="docker一键迁移恢复启动">docker一键迁移恢复启动</a><time datetime="2025-09-29T12:10:05.000Z" title="发表于 2025-09-29 20:10:05">2025-09-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2025 By Xu hxjx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.0.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="/js/mode-switcher.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
