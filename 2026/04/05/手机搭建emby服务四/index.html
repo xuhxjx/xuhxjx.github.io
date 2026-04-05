@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>手机搭建emby服务四 | hxjx</title><meta name="author" content="Xu hxjx"><meta name="copyright" content="Xu hxjx"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Termux中安装emby服务端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手机搭建emby服务四">
+<meta property="og:url" content="https://blog.hxjx.hidns.co/2026/04/05/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E5%9B%9B/">
+<meta property="og:site_name" content="hxjx">
+<meta property="og:description" content="Termux中安装emby服务端">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.hxjx.hidns.co/assets/avatar.png">
+<meta property="article:published_time" content="2026-04-05T14:19:54.000Z">
+<meta property="article:modified_time" content="2026-04-05T15:14:21.197Z">
+<meta property="article:author" content="Xu hxjx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.hxjx.hidns.co/assets/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "手机搭建emby服务四",
+  "url": "https://blog.hxjx.hidns.co/2026/04/05/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E5%9B%9B/",
+  "image": "https://blog.hxjx.hidns.co/assets/avatar.png",
+  "datePublished": "2026-04-05T14:19:54.000Z",
+  "dateModified": "2026-04-05T15:14:21.197Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Xu hxjx",
+      "url": "https://blog.hxjx.hidns.co"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/assets/favicon.ico"><link rel="canonical" href="https://blog.hxjx.hidns.co/2026/04/05/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E5%9B%9B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '手机搭建emby服务四',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 8.0.0"></head><body><div id="web_bg" style="background-image: url(/assets/wallpaper_2.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/assets/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-th"></i><span> 分类</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-laptop-code"></i><span> 技术</span></a></li><li><a class="site-page child" href="/categories/%E5%AD%A6%E4%B9%A0/"><i class="fa-fw fas fa-book-reader"></i><span> 学习</span></a></li><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB/"><i class="fa-fw fas fa-heart"></i><span> 生活</span></a></li><li><a class="site-page child" href="/categories/%E6%91%84%E5%BD%B1/"><i class="fa-fw fas fa-camera"></i><span> 摄影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/assets/wallpaper_1.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/assets/logo.png" alt="Logo"><span class="site-name">hxjx</span></a><a class="nav-page-title" href="/"><span class="site-name">手机搭建emby服务四</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-th"></i><span> 分类</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/%E6%8A%80%E6%9C%AF/"><i class="fa-fw fas fa-laptop-code"></i><span> 技术</span></a></li><li><a class="site-page child" href="/categories/%E5%AD%A6%E4%B9%A0/"><i class="fa-fw fas fa-book-reader"></i><span> 学习</span></a></li><li><a class="site-page child" href="/categories/%E7%94%9F%E6%B4%BB/"><i class="fa-fw fas fa-heart"></i><span> 生活</span></a></li><li><a class="site-page child" href="/categories/%E6%91%84%E5%BD%B1/"><i class="fa-fw fas fa-camera"></i><span> 摄影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">手机搭建emby服务四</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-04-05T14:19:54.000Z" title="发表于 2026-04-05 22:19:54">2026-04-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-04-05T15:14:21.197Z" title="更新于 2026-04-05 23:14:21">2026-04-05</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>Termux中安装emby服务端</p>
+<span id="more"></span>
+
+<h3 id="第一套系统：赛博保姆（守护原版安卓-App）"><a href="#第一套系统：赛博保姆（守护原版安卓-App）" class="headerlink" title="第一套系统：赛博保姆（守护原版安卓 App）"></a>第一套系统：赛博保姆（守护原版安卓 App）</h3><p>这套你已经很熟悉了，我们快速把它在 PM2 里建好档。</p>
+<p>1.在 Termux 中创建脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano ~/emby_nanny.sh</span><br></pre></td></tr></table></figure>
+<p>2.粘贴完整保活代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">while true; do</span><br><span class="line">    if ! curl -s -m 5 http://127.0.0.1:8096 &gt; /dev/null; then</span><br><span class="line">        am start -n com.emby.embyserver/com.emby.embyserver.MainActivity &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">        sleep 20</span><br><span class="line">        pm2 restart frpc cloudflared &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">    fi</span><br><span class="line">    sleep 60</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>3.赋予权限并加入 PM2：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod +x ~/emby_nanny.sh</span><br><span class="line">pm2 start ~/emby_nanny.sh --name &quot;emby_nanny&quot;</span><br><span class="line">pm2 save</span><br></pre></td></tr></table></figure>
+<p>(目前这套系统已经在跑了，如果你现在想尝试第二套，我们需要先把它暂停：)<br>👉 立即执行暂停命令： pm2 stop emby_nanny (并且在手机后台把 Emby App 划掉彻底关掉，腾出 8096 端口)</p>
+<h3 id="第二套系统：不死真神（纯正-Linux-版-Emby）"><a href="#第二套系统：不死真神（纯正-Linux-版-Emby）" class="headerlink" title="第二套系统：不死真神（纯正 Linux 版 Emby）"></a>第二套系统：不死真神（纯正 Linux 版 Emby）</h3><p>现在你的手机 8096 端口已经空出来了，我们来感受一下什么叫极致轻量的原生 Linux 部署。</p>
+<ol>
+<li>安装迷你 Ubuntu 环境<br>直接在 Termux 里挨个执行下面三行命令：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pkg update &amp;&amp; pkg upgrade -y</span><br><span class="line">pkg install proot-distro -y</span><br><span class="line">proot-distro install ubuntu</span><br></pre></td></tr></table></figure>
+<p>2.进入 Ubuntu 并安装 Emby 核心<br>执行这个命令，你会发现命令行的前缀变了，说明你已经“穿越”进 Ubuntu 里面了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proot-distro login ubuntu</span><br></pre></td></tr></table></figure>
+<p>进入后，依次执行以下命令（下载可能需要半分钟）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt upgrade -y</span><br><span class="line">apt install wget curl -y</span><br><span class="line">wget https://github.com/MediaBrowser/Emby.Releases/releases/download/4.8.8.0/emby-server-deb_4.8.8.0_arm64.deb</span><br><span class="line">dpkg -i emby-server-deb_4.8.8.0_arm64.deb</span><br></pre></td></tr></table></figure>
+<p>(如果最后一步提示 Errors were encountered 依赖报错，就补一句 apt –fix-broken install -y，它会自动修好。)</p>
+<p>3.退出 Ubuntu，写启动脚本<br>按 Ctrl + D 或者输入 exit 回车，退回到原汁原味的 Termux 环境。<br>然后我们写个脚本让它后台跑：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano ~/start_emby_linux.sh</span><br></pre></td></tr></table></figure>
+<p>粘贴这一行代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">proot-distro login ubuntu -- /opt/emby-server/bin/emby-server</span><br></pre></td></tr></table></figure>
+<p>保存后，给它权限并加入 PM2：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod +x ~/start_emby_linux.sh</span><br><span class="line">pm2 start ~/start_emby_linux.sh --name &quot;emby_linux&quot;</span><br><span class="line">pm2 save</span><br></pre></td></tr></table></figure>
+<p>终极玩法：如何在这两套系统中“无缝切换”？<br>现在，你的 PM2 列表里躺着两位大将：emby_nanny (保姆) 和 emby_linux (真神)。</p>
+<p>场景 A：今天网络不好，我想用原生 App 搞硬件转码看番</p>
+<p>1.打开 Termux 敲两行命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pm2 stop emby_linux</span><br><span class="line">pm2 start emby_nanny</span><br></pre></td></tr></table></figure>
+<p>2.直接去手机桌面上点开 Emby App，剩下的保姆会替你搞定。</p>
+<p>场景 B：我这两天出门，不需要转码，我要它 24 小时绝对稳定不死！</p>
+<p>1.把手机后台的 Emby App 划掉关闭。</p>
+<p>2.打开 Termux 敲两行命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pm2 stop emby_nanny</span><br><span class="line">pm2 start emby_linux</span><br></pre></td></tr></table></figure>
+<p>3.搞定！手机熄屏扔在角落里，原生的 Linux 进程会稳如泰山地跑在后台。局域网访问 http:&#x2F;&#x2F;你的手机IP:8096 就能进入它全新的后台配置界面。</p>
+<p>（注：Linux 版第一次启动时，里面是空的，你需要去它的网页后台重新把你的电影文件夹挂载上去。挂载路径选根目录下的 &#x2F;sdcard 就是你手机的内部存储。）</p>
+<p>搞定这两套，你这台备用机算是彻底被你榨干每一滴性能了！去试试安装吧，中途遇到什么报错截图发我！</p>
+<p>可能出现安装不上的问题<br>更新代理端口为 FlClash 的 7890（顺水推舟）<br>既然 FlClash 连上了，咱们就告诉 Termux 新的端口号。直接复制粘贴这四行（全覆盖），敲回车：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export ALL_PROXY=&quot;http://127.0.0.1:7890&quot;</span><br><span class="line">export all_proxy=&quot;http://127.0.0.1:7890&quot;</span><br><span class="line">export http_proxy=&quot;http://127.0.0.1:7890&quot;</span><br><span class="line">export https_proxy=&quot;http://127.0.0.1:7890&quot;</span><br></pre></td></tr></table></figure>
+<p>然后再跑一次：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proot-distro install ubuntu</span><br></pre></td></tr></table></figure>
+<p>敲代码“手动拔管”（适合不想关窗口）<br>如果你不想重启 Termux，想在当前窗口直接拔掉代理管道，直接复制并回车运行下面这一行组合拳：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unset ALL_PROXY all_proxy http_proxy https_proxy</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装Douban-插件"><a href="#安装Douban-插件" class="headerlink" title="安装Douban 插件"></a>安装Douban 插件</h3><p>第 1 步：进入 Ubuntu 密室</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proot-distro login ubuntu</span><br></pre></td></tr></table></figure>
+<p>第 2 步：安装下载和解压工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install curl unzip -y</span><br></pre></td></tr></table></figure>
+<p>第 3 步：直接下载豆瓣插件（这行有点长，直接整行复制）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -k -L -o douban.zip https://ghfast.top/https://github.com/AlifeLine/Emby.Plugins.Douban/releases/download/V1.3.0/Emby.Plugins.Douban.zip</span><br></pre></td></tr></table></figure>
+
+<p>第 4 步：把它解压进 Emby 的核心肚子里</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip -o douban.zip -d /var/lib/emby/plugins/</span><br></pre></td></tr></table></figure>
+<p>第 5 步：退出密室，并重启 Emby</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br></pre></td></tr></table></figure>
+<p>再重启：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pm2 restart emby_linux</span><br></pre></td></tr></table></figure>
+<p>豆瓣插件就绝对装好了</p>
+<p>还记得咱们最开始装 Emby 的时候，遇到过一次 System has not been booted with systemd 报错吗？原因我当时解释过：Emby 安装包里带着一个“开机自启脚本”，它企图呼叫 Ubuntu 的后台管家（systemd），但咱们 Termux 的精简版 Ubuntu 里根本没有这个管家，所以报错了。</p>
+<p>那为什么现在又报这个错了？<br>因为你刚才那句命令里包含了 apt install unzip。在 Linux 系统里，apt（包管理器）有个强迫症：每次装新东西前，它会去检查以前有没有“没装利索”的软件。它发现了 Emby 的那个开机脚本一直没执行成功，就非要帮它执行一遍，结果自然又撞墙了，顺便把咱们下载插件的流程也给卡断了。</p>
+<p>好消息是： 你看截图最上面，unzip 其实已经成功装上了！</p>
+<p>既然病根找到了，咱们这次直接把 Emby 那个烦人的开机脚本“物理消灭”，让系统彻底闭嘴，然后顺手把豆瓣插件装好。</p>
+<p>既然你现在的提示符是 root@localhost:~#（说明你已经在 Ubuntu 密室里面了），直接一行一行复制执行下面的命令，彻底解决战斗：</p>
+<p>物理割除“病根”（一劳永逸）<br>把那个总是报错的自启脚本删掉，并告诉系统“它已经装好了，别再管了”：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm /var/lib/dpkg/info/emby-server.postinst</span><br><span class="line">dpkg --configure -a</span><br></pre></td></tr></table></figure>
+<p>(执行完这两句，以后你在这个 Ubuntu 里装任何东西，都绝对不会再跳 Emby 的报错了。)</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://blog.hxjx.hidns.co">Xu hxjx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://blog.hxjx.hidns.co/2026/04/05/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E5%9B%9B/">https://blog.hxjx.hidns.co/2026/04/05/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E5%9B%9B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://blog.hxjx.hidns.co" target="_blank">hxjx</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/assets/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/04/04/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E4%B8%89/" title="手机搭建emby服务三"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">手机搭建emby服务三</div></div><div class="info-2"><div class="info-item-1">PM2监工启动   一、安装“监工” (PM2)1.Termux 终端里，直接复制运行下面这两行命令（安装 Node.js 环境和 PM2）： 1pkg install nodejs -y 1npm install -g pm2 2.彻底改造start.sh 123456789101112131415161718192021222324252627282930313233343536cat &gt; ~/start.sh &lt;&lt; &#x27;EOF&#x27;#!/bin/bashecho &quot;🚀 正在唤醒矩阵服务 (修正版)...&quot;# 1. 启动 OpenList (补上 server 参数)cd ~/openlist &amp;&amp; pm2 start ./openlist --name &quot;openlist&quot; -- server# 2. 启动 Cloudflare 隧道 (修正参数传递语法)pm2 start cloudflared --name &quot;cloudflared&quot; -- tunnel --p...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/assets/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Xu hxjx</div><div class="author-info-description">hxjx的个人博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/xuhxjx" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #4183c4;"></i></a><a class="social-icon" href="mailto:xuhxjxhk@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #FF6666;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E5%A5%97%E7%B3%BB%E7%BB%9F%EF%BC%9A%E8%B5%9B%E5%8D%9A%E4%BF%9D%E5%A7%86%EF%BC%88%E5%AE%88%E6%8A%A4%E5%8E%9F%E7%89%88%E5%AE%89%E5%8D%93-App%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">第一套系统：赛博保姆（守护原版安卓 App）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E5%A5%97%E7%B3%BB%E7%BB%9F%EF%BC%9A%E4%B8%8D%E6%AD%BB%E7%9C%9F%E7%A5%9E%EF%BC%88%E7%BA%AF%E6%AD%A3-Linux-%E7%89%88-Emby%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">第二套系统：不死真神（纯正 Linux 版 Emby）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Douban-%E6%8F%92%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">安装Douban 插件</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/05/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E5%9B%9B/" title="手机搭建emby服务四">手机搭建emby服务四</a><time datetime="2026-04-05T14:19:54.000Z" title="发表于 2026-04-05 22:19:54">2026-04-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/04/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E4%B8%89/" title="手机搭建emby服务三">手机搭建emby服务三</a><time datetime="2026-04-04T15:46:36.000Z" title="发表于 2026-04-04 23:46:36">2026-04-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/03/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E4%BA%8C/" title="手机搭建emby服务二">手机搭建emby服务二</a><time datetime="2026-04-03T12:35:18.000Z" title="发表于 2026-04-03 20:35:18">2026-04-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/31/%E6%89%8B%E6%9C%BA%E6%90%AD%E5%BB%BAemby%E6%9C%8D%E5%8A%A1%E4%B8%80/" title="手机搭建emby服务一">手机搭建emby服务一</a><time datetime="2026-03-31T14:27:14.000Z" title="发表于 2026-03-31 22:27:14">2026-03-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/03/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式">正则表达式</a><time datetime="2026-02-03T09:56:15.000Z" title="发表于 2026-02-03 17:56:15">2026-02-03</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2023 - 2026 By Xu hxjx</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.0.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="/js/mode-switcher.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
